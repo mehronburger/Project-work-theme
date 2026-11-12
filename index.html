@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -47,9 +47,8 @@
       color: #fff;
       background: var(--accent);
       cursor: pointer;
-      transition: opacity 0.15s;
     }
-    button:active { opacity: 0.75; }
+    button:active { opacity: 0.7; }
     button:disabled { background: #3a3a3c; color: var(--sub); }
     .btn-sec { background: var(--input); color: var(--text); }
     .btn-pres { background: #5e5ce6; }
@@ -88,16 +87,14 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- Настройка ключа -->
     <div class="card">
       <div class="row">
         <input type="password" id="apiKey" placeholder="Вставьте Gemini API Key">
-        <button class="btn-sec" style="width: auto;" onclick="saveKey()">Сохранить</button>
+        <button type="button" class="btn-sec" style="width: auto;" onclick="saveKey()">Сохранить</button>
       </div>
       <div class="status" id="keyStatus">Ключ хранится только в памяти вашего iPhone</div>
     </div>
 
-    <!-- Ввод данных -->
     <div class="card">
       <label class="upload-box">
         <span>📎 Добавить фото / скриншоты / PDF</span>
@@ -109,39 +106,44 @@
       <textarea id="userText" placeholder="Текст задания или тема презентации (необязательно, если прикреплены файлы)"></textarea>
 
       <div class="row">
-        <button id="btnHw" style="flex: 1;" onclick="run('hw')">Решить ДЗ</button>
-        <button id="btnPres" class="btn-pres" style="flex: 1;" onclick="run('pres')">Презентация</button>
+        <button type="button" id="btnHw" style="flex: 1;" onclick="run('hw')">Решить ДЗ</button>
+        <button type="button" id="btnPres" class="btn-pres" style="flex: 1;" onclick="run('pres')">Презентация</button>
       </div>
-      <button class="btn-sec" onclick="clearAll()">Очистить всё</button>
+      <button type="button" class="btn-sec" onclick="clearAll()">Очистить всё</button>
     </div>
 
-    <!-- Результат -->
     <div class="output" id="output">Готово к работе.</div>
-    <button class="btn-sec" id="copyBtn" onclick="copyText()">Скопировать ответ</button>
+    <button type="button" class="btn-sec" id="copyBtn" onclick="copyText()">Скопировать ответ</button>
   </div>
 
   <script>
-    const PROMPT_HW = `Ты ГДЗ. Решай ДЗ максимально кратко, насколько это возможно. Без вопросов, без вступлений, без обращений на «ты» и без лишних объяснений. Просто выдавай готовые ответы (номер вопроса — ответ) при отправке фото, файлов или текста.`;
-
-    const PROMPT_PRES = `Создай готовую структуру и текст презентации по присланным материалам или теме. Без вступлений, без вопросов и без обращений на «ты». Формат: Слайд 1: Заголовок и тезисы, Слайд 2: Заголовок и тезисы и так далее. Максимально чётко и по делу.`;
+    const PROMPT_HW = "Ты ГДЗ. Решай ДЗ максимально кратко, насколько это возможно. Без вопросов, без вступлений, без обращений на «ты» и без лишних объяснений. Просто выдавай готовые ответы (номер вопроса — ответ) при отправке фото, файлов или текста.";
+    const PROMPT_PRES = "Создай готовую структуру и текст презентации по присланным материалам или теме. Без вступлений, без вопросов и без обращений на «ты». Формат: Слайд 1: Заголовок и тезисы, Слайд 2: Заголовок и тезисы и так далее. Максимально чётко и по делу.";
 
     let attachments = [];
 
-    window.onload = () => {
-      const saved = localStorage.getItem('gdz_gemini_key');
-      if (saved) {
-        document.getElementById('apiKey').value = saved;
-        document.getElementById('keyStatus').textContent = 'API-ключ активен';
-        document.getElementById('keyStatus').style.color = '#30d158';
-      }
-    };
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = localStorage.getItem('gdz_gemini_key');
+        if (saved) {
+          document.getElementById('apiKey').value = saved;
+          document.getElementById('keyStatus').textContent = 'API-ключ активен';
+          document.getElementById('keyStatus').style.color = '#30d158';
+        }
+      } catch (e) {}
+    });
 
     function saveKey() {
       const val = document.getElementById('apiKey').value.trim();
-      localStorage.setItem('gdz_gemini_key', val);
       const st = document.getElementById('keyStatus');
-      st.textContent = val ? 'Ключ сохранён на устройстве' : 'Ключ удалён';
-      st.style.color = val ? '#30d158' : '#8e8e93';
+      try {
+        localStorage.setItem('gdz_gemini_key', val);
+        st.textContent = val ? 'Ключ сохранён на устройстве' : 'Ключ удалён';
+        st.style.color = val ? '#30d158' : '#8e8e93';
+      } catch (e) {
+        st.textContent = 'Ошибка сохранения: отключите Частный доступ в Safari';
+        st.style.color = '#ff453a';
+      }
     }
 
     function clearAll() {
@@ -152,7 +154,6 @@
       document.getElementById('output').textContent = 'Очищено.';
     }
 
-    // Сжатие изображений на клиенте для мгновенной работы без лагов на iPhone
     function compressImage(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -218,14 +219,14 @@
     }
 
     async function run(mode) {
-      const key = localStorage.getItem('gdz_gemini_key');
+      const key = document.getElementById('apiKey').value.trim() || localStorage.getItem('gdz_gemini_key');
       const text = document.getElementById('userText').value.trim();
       const output = document.getElementById('output');
       const btnHw = document.getElementById('btnHw');
       const btnPres = document.getElementById('btnPres');
 
       if (!key) {
-        output.textContent = 'Укажите и сохраните Gemini API Key в верхнем поле.';
+        output.textContent = 'Укажите Gemini API Key в верхнем поле.';
         return;
       }
       if (!text && attachments.length === 0) {
@@ -255,21 +256,9 @@
         const data = await response.json();
 
         if (!response.ok || data.error) {
-          output.textContent = 'Ошибка: ' + (data.error?.message || response.statusText);
+          output.textContent = 'Ошибка: ' + (data.error && data.error.message ? data.error.message : response.statusText);
         } else {
-          const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Пустой ответ.';
+          const answer = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : 'Пустой ответ.';
           output.textContent = answer.trim();
         }
       } catch (err) {
-        output.textContent = 'Ошибка соединения: ' + err.message;
-      } finally {
-        btnHw.disabled = false;
-        btnPres.disabled = false;
-      }
-    }
-
-    function copyText() {
-      const text = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(text);
-      const btn = document.getElementById('copyBtn');
-      btn.textContent = 'Скопировано';
