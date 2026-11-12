@@ -1,107 +1,4 @@
- <!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="One Piece ГДЗ">
-  <title>One Piece • ГДЗ и Презентации</title>
-  <style>
-    :root {
-      --sea-grad: linear-gradient(160deg, #0284c7 0%, #0369a1 40%, #1e3a8a 100%);
-      --parchment: #fdf6e3;
-      --parchment-dark: #f3e5c0;
-      --ink: #2c1e16;
-      --ink-sub: #6b4c35;
-      --luffy-red: #dc2626;
-      --strawhat-gold: #f59e0b;
-      --border-wood: #5c3a21;
-    }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 26px);
-      background: var(--sea-grad);
-      background-attachment: fixed;
-      color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Georgia", serif;
-    }
-    .wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-    .header { text-align: center; padding: 6px 0 2px; }
-    .header h1 {
-      margin: 0; font-size: 24px; font-weight: 900; color: #fde047;
-      text-shadow: 0 3px 0 #991b1b, 0 5px 12px rgba(0, 0, 0, 0.45);
-      letter-spacing: 0.5px; text-transform: uppercase;
-    }
-    .header-sub {
-      font-size: 12px; font-weight: 700; color: #bae6fd;
-      letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
-    }
-    .bounty-card {
-      background: var(--parchment);
-      background-image: radial-gradient(rgba(139, 90, 43, 0.08) 1px, transparent 0);
-      background-size: 16px 16px;
-      border: 3px solid var(--border-wood); border-radius: 14px; padding: 14px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), inset 0 0 18px rgba(180, 130, 70, 0.25);
-      display: flex; flex-direction: column; gap: 11px;
-    }
-    .wanted-banner {
-      text-align: center; font-weight: 900; font-size: 13px; letter-spacing: 3px;
-      color: var(--border-wood); border-bottom: 2px dashed rgba(92, 58, 33, 0.35);
-      padding-bottom: 6px; text-transform: uppercase;
-    }
-    .row { display: flex; gap: 8px; }
-    input, textarea, button {
-      font-size: 16px; border-radius: 10px; outline: none;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-    }
-    input, textarea {
-      width: 100%; background: #fffbeb; color: var(--ink);
-      padding: 12px; border: 2px solid #d6b88d;
-    }
-    input:focus, textarea:focus {
-      border-color: var(--luffy-red);
-      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
-    }
-    textarea { resize: vertical; min-height: 76px; }
-    button {
-      padding: 13px 14px; font-weight: 800; border: 2px solid rgba(0,0,0,0.2);
-      cursor: pointer; text-transform: uppercase; letter-spacing: 0.4px;
-      transition: transform 0.1s ease, opacity 0.15s;
-    }
-    button:active { transform: scale(0.97); opacity: 0.9; }
-    button:disabled { opacity: 0.55; transform: none; }
-    .btn-save { background: linear-gradient(180deg, #22c55e, #15803d); color: #fff; box-shadow: 0 3px 0 #14532d; }
-    .btn-hw { background: linear-gradient(180deg, #ef4444, #b91c1c); color: #fef08a; box-shadow: 0 4px 0 #7f1d1d; }
-    .btn-pres { background: linear-gradient(180deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 0 #78350f; }
-    .btn-sec { background: var(--parchment-dark); color: var(--border-wood); border: 2px solid #c29b61; font-size: 14px; padding: 10px; }
-    .btn-copy { background: linear-gradient(180deg, #0ea5e9, #0369a1); color: #fff; box-shadow: 0 4px 0 #0c4a6e; }
-    .upload-box {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: #fef3c7; border: 2.5px dashed #d97706; color: #92400e;
-      padding: 14px; border-radius: 12px; font-weight: 800;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; cursor: pointer;
-    }
-    .upload-box:active { transform: scale(0.98); }
-    .files-list { display: flex; gap: 8px; flex-wrap: wrap; }
-    .thumb { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-wood); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
-    .pdf-badge {
-      background: #fee2e2; padding: 6px 10px; border-radius: 8px;
-      font-size: 13px; color: #991b1b; font-weight: 700; border: 1.5px solid #f87171;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-    }
-    .output {
-      background: var(--parchment); border: 3px solid var(--border-wood); border-radius: 14px;
-      padding: 15px; min-height: 130px; white-space: pre-wrap; line-height: 1.5; font-size: 15.5px;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; color: var(--ink);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), inset 0 0 18px rgba(180, 130, 70, 0.25); word-wrap: break-word;
-    }
-    .status { font-size: 12px; color: var(--ink-sub); text-align: center; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
-  </style>
-</head>
-<body>
+ <body>
   <div class="wrap">
     <div class="header">
       <h1>🏴‍☠️ ONE PIECE • ГДЗ</h1>
@@ -111,7 +8,7 @@
       <div class="wanted-banner">⚓ Лог Пос • Навигация ⚓</div>
       <div class="row">
         <input type="password" id="apiKey" placeholder="🗝️ Вставьте Gemini API Key">
-        <button type="button" class="btn-save" style="width: auto;" id="btnSave">ОК</button>
+        <button type="button" class="btn-save" style="width: auto;" onclick="saveKey()">ОК</button>
       </div>
       <div class="status" id="keyStatus">Ключ хранится только в трюме вашего iPhone</div>
     </div>
@@ -119,41 +16,33 @@
       <div class="wanted-banner">📜 Карта Сокровищ • Задания 📜</div>
       <label class="upload-box">
         <span>🧭 Загрузить фото, скриншоты или PDF</span>
-        <input type="file" id="fileInput" accept="image/*,application/pdf,text/plain" multiple hidden>
+        <input type="file" id="fileInput" accept="image/*,application/pdf,text/plain" multiple hidden onchange="processFiles(this.files)">
       </label>
       <div class="files-list" id="preview"></div>
       <textarea id="userText" placeholder="✍️ Текст задания или тема презентации..."></textarea>
       <div class="row">
-        <button type="button" class="btn-hw" id="btnHw" style="flex: 1;">👒 Решить ДЗ</button>
-        <button type="button" class="btn-pres" id="btnPres" style="flex: 1;">🗺️ Презентация</button>
+        <button type="button" class="btn-hw" id="btnHw" style="flex: 1;" onclick="run('hw')">👒 Решить ДЗ</button>
+        <button type="button" class="btn-pres" id="btnPres" style="flex: 1;" onclick="run('pres')">🗺️ Презентация</button>
       </div>
-      <button type="button" class="btn-sec" id="btnClear">🌊 Очистить палубу</button>
+      <button type="button" class="btn-sec" onclick="clearAll()">🌊 Очистить палубу</button>
     </div>
     <div class="output" id="output">Готов к отплытию на Гранд Лайн! 🏴‍☠️</div>
-    <button type="button" class="btn-copy" id="copyBtn">💰 Забрать добычу (Копировать)</button>
+    <button type="button" class="btn-copy" id="copyBtn" onclick="copyText()">💰 Забрать добычу (Копировать)</button>
   </div>
+
   <script>
     const PROMPT_HW = "Ты ГДЗ. Решай ДЗ максимально кратко, насколько это возможно. Без вопросов, без вступлений, без обращений на «ты» и без лишних объяснений. Просто выдавай готовые ответы (номер вопроса — ответ) при отправке фото, файлов или текста.";
     const PROMPT_PRES = "Создай готовую структуру и текст презентации по присланным материалам или теме. Без вступлений, без вопросов и без обращений на «ты». Формат: Слайд 1: Заголовок и тезисы, Слайд 2: Заголовок и тезисы и так далее. Максимально чётко и по делу.";
     let attachments = new Array();
 
-    function initApp() {
-      try {
-        const saved = localStorage.getItem('gdz_gemini_key');
-        if (saved) {
-          document.getElementById('apiKey').value = saved;
-          const st = document.getElementById('keyStatus');
-          st.textContent = '✅ Лог Пос настроен • Ключ активен';
-          st.style.color = '#15803d';
-        }
-      } catch (e) {}
-      document.getElementById('btnSave').addEventListener('click', saveKey);
-      document.getElementById('btnHw').addEventListener('click', function() { run('hw'); });
-      document.getElementById('btnPres').addEventListener('click', function() { run('pres'); });
-      document.getElementById('btnClear').addEventListener('click', clearAll);
-      document.getElementById('copyBtn').addEventListener('click', copyText);
-      document.getElementById('fileInput').addEventListener('change', function(e) { processFiles(e.target.files); });
-    }
+    try {
+      const saved = localStorage.getItem('gdz_gemini_key');
+      if (saved) {
+        document.getElementById('apiKey').value = saved;
+        document.getElementById('keyStatus').textContent = '✅ Лог Пос настроен • Ключ активен';
+        document.getElementById('keyStatus').style.color = '#15803d';
+      }
+    } catch (e) {}
 
     function saveKey() {
       const val = document.getElementById('apiKey').value.trim();
@@ -196,3 +85,91 @@
             resolve({ mimeType: 'image/jpeg', data: dataUrl.split(',').pop(), previewUrl: dataUrl });
           };
         };
+      });
+    }
+
+    function readFileBase64(file) {
+      return new Promise(function(resolve) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          resolve({ mimeType: file.type || 'application/pdf', data: reader.result.split(',').pop(), name: file.name });
+        };
+      });
+    }
+
+    async function processFiles(fileList) {
+      const preview = document.getElementById('preview');
+      const files = Array.from(fileList);
+      for (const file of files) {
+        if (file.type.startsWith('image/')) {
+          const compressed = await compressImage(file);
+          attachments.push({ inlineData: { mimeType: compressed.mimeType, data: compressed.data } });
+          const img = document.createElement('img');
+          img.src = compressed.previewUrl;
+          img.className = 'thumb';
+          preview.appendChild(img);
+        } else {
+          const doc = await readFileBase64(file);
+          attachments.push({ inlineData: { mimeType: doc.mimeType, data: doc.data } });
+          const badge = document.createElement('div');
+          badge.className = 'pdf-badge';
+          badge.textContent = '📜 ' + doc.name;
+          preview.appendChild(badge);
+        }
+      }
+    }
+
+    async function run(mode) {
+      const key = document.getElementById('apiKey').value.trim() || localStorage.getItem('gdz_gemini_key');
+      const text = document.getElementById('userText').value.trim();
+      const output = document.getElementById('output');
+      const btnHw = document.getElementById('btnHw');
+      const btnPres = document.getElementById('btnPres');
+
+      if (!key) { output.textContent = '⚠️ Укажите Gemini API Key в верхнем поле.'; return; }
+      if (!text && attachments.length === 0) { output.textContent = '⚠️ Добавьте фото, PDF или текст.'; return; }
+
+      btnHw.disabled = true; btnPres.disabled = true;
+      output.textContent = '⛵ Плывём за ответом...';
+
+      const parts = attachments.slice();
+      if (text) { parts.push({ text: text }); }
+
+      const sysPrompt = mode === 'pres' ? PROMPT_PRES : PROMPT_HW;
+      const sysParts = new Array(); sysParts.push({ text: sysPrompt });
+      const contentsArr = new Array(); contentsArr.push({ parts: parts });
+      const apiUrl = 'https://' + '://googleapis.com' + '/v1beta/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(key);
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ systemInstruction: { parts: sysParts }, contents: contentsArr })
+        });
+        const data = await response.json();
+        if (!response.ok || data.error) {
+          output.textContent = 'Ошибка: ' + (data.error && data.error.message ? data.error.message : response.statusText);
+        } else {
+          const firstCand = data.candidates ? data.candidates.at(0) : null;
+          const firstPart = firstCand && firstCand.content && firstCand.content.parts ? firstCand.content.parts.at(0) : null;
+          const answer = firstPart && firstPart.text ? firstPart.text : 'Пустой ответ.';
+          output.textContent = answer.trim();
+        }
+      } catch (err) {
+        output.textContent = 'Ошибка соединения: ' + err.message;
+      } finally {
+        btnHw.disabled = false; btnPres.disabled = false;
+      }
+    }
+
+    function copyText() {
+      const text = document.getElementById('output').textContent;
+      if (navigator.clipboard) { navigator.clipboard.writeText(text); }
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✅ Добыча в сундуке!';
+      setTimeout(function() { btn.textContent = '💰 Забрать добычу (Копировать)'; }, 1500);
+    }
+  </script>
+</body>
+</html>
